@@ -6,3 +6,16 @@ body{
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
 }
+
+.main-content {
+    overflow-y: auto;
+}
+
+.navbar-container:hover ~ * .main-content,
+.sidebar-container:hover ~ .main-content {
+    pointer-events: none;
+}
+
+.main-content:hover {
+    pointer-events: auto;
+}

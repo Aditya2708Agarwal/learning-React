@@ -56,6 +56,39 @@ export const notesReducer = (state, {type, payload}) => {
                 archived: [
                     ...state.archived,
                     state.notes.find(note => note.id === payload.id )
+                ],
+                notes: state.notes.filter(note => note.id !== payload.id)
+            }
+
+        case "UNARCHIVE_NOTE":
+            return {
+                ...state,
+
+                archived: state.archived.filter(note => note.id !== payload.id),
+                notes:[
+                    ...state.notes,
+                    state.archived.find(note => note.id === payload.id)
+                ]
+            }
+
+
+        case "DELETE_NOTE":
+            return {
+                ...state,
+                deleted: [
+                    ...state.deleted,
+                    state.notes.find(note => note.id === payload.id)
+                ],
+                notes: state.notes.filter(note => note.id !== payload.id)
+            }
+
+        case 'RESTORE_NOTE':
+            return {
+                ...state,
+                deleted: state.deleted.filter(note => note.id !== payload.id),
+                notes: [
+                    ...state.notes,
+                    state.deleted.find(note => note.id === payload.id)
                 ]
             }
         

@@ -1,6 +1,3 @@
-import { Navbar } from "../../components/Navbar"
-import { Fragment, useReducer } from "react"
-import { Sidebar } from "../../components/sidebar"
 import { notesReducer } from "../../reducers/notesReducer"
 import { NotesCard } from "../../components/notesCard/notesCard"
 import { useNotes } from "../../reducers/notesContext"
