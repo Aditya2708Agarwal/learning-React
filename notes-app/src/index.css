@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Adjust this value to control vertical space */
+}
+
 body{
   background-color: #1f1f28;
 }

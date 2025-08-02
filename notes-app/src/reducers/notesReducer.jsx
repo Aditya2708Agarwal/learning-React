@@ -1,7 +1,7 @@
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
-export const notesReducer = (state, {type, payload}) => {
-    switch (type){
+export const notesReducer = (state, { type, payload }) => {
+    switch (type) {
         case "TITLE":
             return {
                 ...state,
@@ -11,7 +11,7 @@ export const notesReducer = (state, {type, payload}) => {
             return {
                 ...state,
                 text: payload
-            }       
+            }
 
         case "ADD_NOTE":
             return {
@@ -32,21 +32,21 @@ export const notesReducer = (state, {type, payload}) => {
                 ...state,
                 title: "",
                 text: ""
-            } 
-            
+            }
+
         case "PIN_NOTE":
             return {
                 ...state,
                 notes: state.notes.map(note =>
-                    note.id === payload.id ? {...note, isPinned: true} : note
+                    note.id === payload.id ? { ...note, isPinned: true } : note
                 )
             }
-        
+
         case "UNPIN_NOTE":
-            return  {
+            return {
                 ...state,
-                notes: state.notes.map(note => 
-                    note.id === payload.id ? {...note, isPinned: false} : note
+                notes: state.notes.map(note =>
+                    note.id === payload.id ? { ...note, isPinned: false } : note
                 )
             }
 
@@ -55,7 +55,7 @@ export const notesReducer = (state, {type, payload}) => {
                 ...state,
                 archived: [
                     ...state.archived,
-                    state.notes.find(note => note.id === payload.id )
+                    state.notes.find(note => note.id === payload.id)
                 ],
                 notes: state.notes.filter(note => note.id !== payload.id)
             }
@@ -65,22 +65,28 @@ export const notesReducer = (state, {type, payload}) => {
                 ...state,
 
                 archived: state.archived.filter(note => note.id !== payload.id),
-                notes:[
+                notes: [
                     ...state.notes,
                     state.archived.find(note => note.id === payload.id)
                 ]
             }
 
 
-        case "DELETE_NOTE":
+        case "DELETE_NOTE": {
+            const noteInNotes = state.notes.find(note => note.id === payload.id);
+            const noteInArchive = state.archived.find(note => note.id === payload.id);
+            const noteToDelete = noteInNotes || noteInArchive;
+
             return {
                 ...state,
                 deleted: [
                     ...state.deleted,
-                    state.notes.find(note => note.id === payload.id)
+                    noteToDelete
                 ],
-                notes: state.notes.filter(note => note.id !== payload.id)
-            }
+                notes: state.notes.filter(note => note.id !== payload.id),
+                archived: state.archived.filter(note => note.id !== payload.id)
+            };
+        }
 
         case 'RESTORE_NOTE':
             return {
@@ -91,7 +97,13 @@ export const notesReducer = (state, {type, payload}) => {
                     state.deleted.find(note => note.id === payload.id)
                 ]
             }
-        
+
+        case "DELETE_FOREVER":
+            return {
+                ...state,
+                deleted: state.deleted.filter(note => note.id !== payload.id)
+            }
+
         default:
             return state;
     }
