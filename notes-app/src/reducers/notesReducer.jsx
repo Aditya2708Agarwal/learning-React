@@ -22,9 +22,7 @@ export const notesReducer = (state, {type, payload}) => {
                         id: uuid(),
                         title: state.title,
                         text: state.text,
-                        isImportant: false,
-                        isArchived: false,
-                        isDeleted: false
+                        isPinned: false,
                     }
                 ],
             }
@@ -34,7 +32,33 @@ export const notesReducer = (state, {type, payload}) => {
                 ...state,
                 title: "",
                 text: ""
-            }     
+            } 
+            
+        case "PIN_NOTE":
+            return {
+                ...state,
+                notes: state.notes.map(note =>
+                    note.id === payload.id ? {...note, isPinned: true} : note
+                )
+            }
+        
+        case "UNPIN_NOTE":
+            return  {
+                ...state,
+                notes: state.notes.map(note => 
+                    note.id === payload.id ? {...note, isPinned: false} : note
+                )
+            }
+
+        case "ARCHIVE_NOTE":
+            return {
+                ...state,
+                archived: [
+                    ...state.archived,
+                    state.notes.find(note => note.id === payload.id )
+                ]
+            }
+        
         default:
             return state;
     }
